@@ -1,0 +1,22 @@
+{
+  "name": "alexa-heos",
+  "version": "1.0.0",
+  "description": "Experimental Alexa control for Denon HEOS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mattsplats/alexa-heos.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mattsplats/alexa-heos/issues"
+  },
+  "homepage": "https://github.com/mattsplats/alexa-heos#readme",
+  "dependencies": {
+    "alexa-sdk": "^1.0.6"
+  }
+}
