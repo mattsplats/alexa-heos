@@ -1,15 +1,16 @@
 'use strict';
 
-const Alexa = require('alexa-sdk');
-const net = require('net');
+var Alexa = require('alexa-sdk');
+var net = require('net');
+var testing = process.argv[2] || false; 
 
 exports.handler = function(event, context, callback) {
-    const alexa = Alexa.handler(event, context);
+    var alexa = Alexa.handler(event, context);
     alexa.registerHandlers(handlers);
     alexa.execute();
 };
 
-const handlers = {
+var handlers = {
 	'LaunchRequest': function () {
 		this.emit('PlayPause');
 	},
@@ -17,18 +18,19 @@ const handlers = {
 		this.emit('PlayPause');
 	},
 	'PlayPause': function () {
-		const heos = net.connect({ host: '192.168.0.6', port: 1255 }, () => {
+		var heos = net.connect({ host: '64fc05cf370c.sn.mynetname.net', port: 32401 }, function () {
 			heos.write(`heos://player/get_play_state?pid=1699474811\r\n`, 'utf8', () => {
-				console.log('Request sent');
+				if (testing) console.log('Request sent');
 			});
 
-			heos.on('data', data => {
-				const oldState = JSON.parse(data).heos.message.match(/state=(.*)/)[1];
-				const newState = oldState === 'pause' ? 'play' : 'pause';
+			heos.on('data', function (data) {
+				var oldState = JSON.parse(data).heos.message.match(/state=(.*)/)[1];
+				var newState = oldState === 'pause' ? 'play' : 'pause';
 
 				heos.write(`heos://player/set_play_state?pid=1699474811&state=${newState}\r\n`, 'utf8', () => {
-					console.log(`${oldState} changed to ${newState}`);
+					if (testing) console.log(`${oldState} changed to ${newState}`);
 					heos.end();
+					if (!testing) this.emit(':tell', 'OK!');
 				})
 			});
 		});
@@ -45,19 +47,4 @@ const handlers = {
 	}
 };
 
-function playPause () {
-	const heos = net.connect({ host: '192.168.0.6', port: 1255 }, () => {
-		heos.write(`heos://player/get_play_state?pid=1699474811\r\n`, 'utf8', () => {
-			console.log('Request sent');
-		});
-		heos.on('data', data => {
-			const oldState = JSON.parse(data).heos.message.match(/state=(.*)/)[1];
-			const newState = oldState === 'pause' ? 'play' : 'pause';
-
-			heos.write(`heos://player/set_play_state?pid=1699474811&state=${newState}\r\n`, 'utf8', () => {
-				console.log(`${oldState} changed to ${newState}`);
-				heos.end();
-			})
-		});
-	});
-}
+if (testing) handlers['PlayPause']();
