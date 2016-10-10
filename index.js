@@ -32,10 +32,12 @@ var handlers = {
 
 				heos.write(`heos://player/set_play_state?pid=1699474811&state=${newState}\r\n`, 'utf8', () => {
 					if (testing) console.log(`${oldState} changed to ${newState}`);
-					else this.emit(':tell', 'OK!');
-					
 					heos.end();
-				})
+				});
+			});
+
+			heos.on('end', () => {
+				testing ? console.log('Connection closed') : this.emit(':tell', 'OK!');
 			});
 		});
 	},
