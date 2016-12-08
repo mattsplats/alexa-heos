@@ -11,6 +11,6 @@ My proposed solution is:
  - You can host an Alexa skill directly on an HTTPS server, but hosting the skill off Lambda and having it make the connection to your local server will be easier (and probably slower).
 3. Have the local server query the HEOS API (if necessary) and issue the proper command to HEOS.
 
-Exposing a local server API would also be more secure than exposing a raw TCP socket at the local HEOS address to the entire WWW.
+Exposing a local server API would also be more secure than exposing a raw TCP socket at the local HEOS address to the whole Interwebs.
 
 I currently don't have free time to do this, but if you try this on your own, let me know how it goes.
