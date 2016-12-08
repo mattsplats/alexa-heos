@@ -3,9 +3,10 @@
 var Alexa = require('alexa-sdk');
 var net = require('net');
 
+var env = require('./env_vars.json');
 var testing = process.argv[2] || false; 
-var host = testing ? '192.168.0.6' : '64fc05cf370c.sn.mynetname.net';
-var port = testing ? 1255 : 32401;
+var host = testing ? env.testing.address : env.production.address;
+var port = testing ? env.testing.port : env.production.port;
 
 exports.handler = function(event, context, callback) {
     var alexa = Alexa.handler(event, context);
@@ -23,7 +24,7 @@ var handlers = {
 	'PlayPause': function () {
 		var heos = net.connect({ host: host, port: port }, () => {
 			heos.write(`heos://player/get_play_state?pid=1699474811\r\n`, 'utf8', () => {
-				if (testing) console.log('Request sent');
+				console.log('Request sent');
 			});
 
 			heos.on('data', data => {
@@ -31,13 +32,14 @@ var handlers = {
 				var newState = oldState === 'pause' ? 'play' : 'pause';
 
 				heos.write(`heos://player/set_play_state?pid=1699474811&state=${newState}\r\n`, 'utf8', () => {
-					if (testing) console.log(`${oldState} changed to ${newState}`);
+					console.log(`${oldState} changed to ${newState}`);
 					heos.end();
 				});
 			});
 
 			heos.on('end', () => {
-				testing ? console.log('Connection closed') : this.emit(':tell', 'OK!');
+				console.log('Connection closed');
+				this.emit(':tell', 'OK!');
 			});
 		});
 	},
