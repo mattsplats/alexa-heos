@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-# alexa-heos
-Experimental Alexa control for Denon HEOS
-=======
 # alexa-heos
 > Experimental Alexa control for Denon HEOS
 
@@ -18,4 +14,3 @@ My proposed solution is:
 Exposing a local server API would also be more secure than exposing a raw TCP socket at the local HEOS address to the whole Interwebs.
 
 I currently don't have free time to do this, but if you try this on your own, let me know how it goes.
->>>>>>> f2a145e12b977a78908eda56bf5252a6ce64e701
